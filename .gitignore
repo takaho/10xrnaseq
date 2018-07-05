@@ -1,3 +1,11 @@
+.*
+a.out
+*.gz
+*.txt
+*.cnt
+*.csv
+*.tsv
+*.tpm
 *.o
 *~
 *#
