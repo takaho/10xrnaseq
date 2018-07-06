@@ -67,6 +67,7 @@ for dn in args.i:
         for fn in output_filenames:
             if os.path.exists(fn) and os.path.getsize(fn) > 100000:
                 with open(fn) as fi:
+                    helems = []
                     while 1:
                         line = fi.readline()
                         if line.startswith('#'):

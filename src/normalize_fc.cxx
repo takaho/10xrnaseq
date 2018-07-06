@@ -55,9 +55,11 @@ int main(int argc, char** argv) {
   vector<vector<int>> data;
   vector<vector<string>> info;
   bool first = true;
+  int skipcolumns = 6;
   for (auto filename : filenames_fc) {
     size_t rpos = filename.rfind("/");
     string stem;
+    string ext;
     if (rpos != string::npos) {
       stem = filename.substr(rpos + 1);
     } else {
@@ -65,6 +67,7 @@ int main(int argc, char** argv) {
     }
     rpos = stem.rfind(".");
     if (rpos != string::npos) {
+      ext = stem.substr(rpos + 1);
       stem = stem.substr(0, rpos);
     }
       
@@ -75,6 +78,11 @@ int main(int argc, char** argv) {
     //vector<string> samples;
     int num_columns = 0;
     int row_index = 0;
+    if (ext == "fc") {
+      skipcolumns = 6;
+    } else if (ext == "cnt") {
+      skipcolumns = 1;
+    }
     if (verbose) {
       cerr << "loading " << filename << endl;
     }
@@ -96,7 +104,7 @@ int main(int argc, char** argv) {
       if (num_columns == 0) {
 	int index = 0;
 	for (auto item : items_) {
-	  if (index++ < 6) {
+	  if (index++ < skipcolumns) {
 	    continue;
 	  }
 	  string label = stem + string(":") + std::to_string(num_columns + 1);
@@ -122,9 +130,9 @@ int main(int argc, char** argv) {
 	vector<string> items{std::begin(items_), std::end(items_)};
 	//cout << items.size() << " columns" << endl;
 	if (first) {
-	  info.push_back(std::vector<string>(items.begin(), items.begin() + 6));
+	  info.push_back(std::vector<string>(items.begin(), items.begin() + skipcolumns));
 	  vector<int> row;
-	  for (auto it = items.begin() + 6; it != items.end(); it++) {
+	  for (auto it = items.begin() + skipcolumns; it != items.end(); it++) {
 	    row.push_back(std::stoi(*it));
 	  }
 	  //cout << row.size() << " / " << num_columns << endl;
@@ -144,10 +152,10 @@ int main(int argc, char** argv) {
 	    throw runtime_error(string("invalid index row ") + *(items.begin()) + string(" <= ") + info[row_index][0]);
 	  }
 	  vector<int>& row = data[row_index];
-	  for (auto it = items.begin() + 6; it != items.end(); it++) {
+	  for (auto it = items.begin() + skipcolumns; it != items.end(); it++) {
 	    row.push_back(std::stoi(*it));
 	  }
-	  if (items.size() - 6 != num_columns) {
+	  if (items.size() - skipcolumns != num_columns) {
 	    throw runtime_error("inconsistent column size");
 	  }
 	}

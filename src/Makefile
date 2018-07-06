@@ -279,7 +279,7 @@ top_builddir = .
 top_srcdir = .
 count_and_rename_SOURCES = count_and_rename.cxx
 normalize_fc_SOURCES = normalize_fc.cxx
-AM_CXXFLAGS = -std=c++11
+AM_CXXFLAGS = -std=c++11 -O3
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 

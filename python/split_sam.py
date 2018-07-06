@@ -1,5 +1,24 @@
 import os, sys, re, argparse, subprocess, pathlib
 
+"""
+Procedure
+
+ount_and_rename --R1 [R1.fastq.gz] --R2 [R2.fastq.gz] -o [renamed_fastq.gz] --mismatches [num] 
+=> fastq.gz
+STAR 
+=> BAM
+python split_sam.py -i [BAM] -o [output_directory] -n [minimum reads]
+=> many sam files
+featureCount
+=> .fc files
+normalize_fc -i [fc2 files] -o [label]
+=> label.cnt and label.tpm files
+
+
+count_and
+
+"""
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', metavar='bam/sam file')
 parser.add_argument('-o', metavar='directory')
@@ -84,7 +103,7 @@ dstdir.mkdir(exist_ok=True, parents=True)
 while 1:
     line = istr.readline()
     if line == '': break
-    line = istr.readline().decode('utf-8')
+    line = line.decode('utf-8')
     if line.startswith('@'):
         header += line
         continue
